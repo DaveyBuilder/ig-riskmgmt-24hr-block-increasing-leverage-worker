@@ -99,7 +99,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
 
     for (const instrument in positionsWithin24Hours) {
 
-        if (instrument !== 'Apple Inc (All Sessions)' && instrument !== 'EU Stocks 50' && instrument !== 'EUR/USD' && instrument !== 'GBP/USD') {
+        if (instrument !== 'Apple Inc (All Sessions)' && instrument !== 'EU Stocks 50' && instrument !== 'EUR/USD') {
             // Filter out positions with reason 'openPositionsConflict'
             const openPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'openPositionsConflict');
 

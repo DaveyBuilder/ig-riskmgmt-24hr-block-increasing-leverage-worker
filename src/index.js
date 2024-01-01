@@ -21,7 +21,7 @@ export default {
 
 	async scheduled(event, env, ctx) {
 
-		const usingDemoAccount = true;
+		const usingDemoAccount = false;
 
 		// Call processRequest on the cron schedule
 		return executeScheduledTask(event, env, ctx, usingDemoAccount);

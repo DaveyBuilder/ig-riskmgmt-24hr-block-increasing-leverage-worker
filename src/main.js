@@ -77,8 +77,8 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
 
                     const diff = Math.abs(openPositionsCreatedDates[i] - closedPositionsOpenDates[j]);
 
-                    // If difference <= 24 hours
-                    if (diff <= 24 * 60 * 60 * 1000) {
+                    // If difference <= 24 hours and the open position was created after the closed position
+                    if (diff <= 24 * 60 * 60 * 1000 && openPositionsCreatedDates[i] > closedPositionsOpenDates[j]) {
                         // Create an object for the conflicting (open) position
                         const positionData = { position: openPositions[closedInstrument].positions[i], reason: 'closedPositionsConflict' };
 
@@ -99,7 +99,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
 
     for (const instrument in positionsWithin24Hours) {
 
-        if (instrument !== 'Apple Inc (All Sessions)' && instrument !== 'EU Stocks 50' && instrument !== 'EUR/USD') {
+        if (instrument !== 'EU Stocks 50' && instrument !== 'EUR/USD') {
             // Filter out positions with reason 'openPositionsConflict'
             const openPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'openPositionsConflict');
 

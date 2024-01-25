@@ -99,20 +99,18 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
 
     for (const instrument in positionsWithin24Hours) {
 
-        if (instrument !== 'EU Stocks 50' && instrument !== 'EUR/USD') {
-            // Filter out positions with reason 'openPositionsConflict'
-            const openPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'openPositionsConflict');
+        // Filter out positions with reason 'openPositionsConflict'
+        const openPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'openPositionsConflict');
 
-            // Sort positions by createdDateUTC
-            openPositionsConflicts.sort((a, b) => new Date(a.position.position.createdDateUTC) - new Date(b.position.position.createdDateUTC));
+        // Sort positions by createdDateUTC
+        openPositionsConflicts.sort((a, b) => new Date(a.position.position.createdDateUTC) - new Date(b.position.position.createdDateUTC));
 
-            // Push all positions except the first one into positionsForClosure
-            positionsForClosure.push(...openPositionsConflicts.slice(1));
+        // Push all positions except the first one into positionsForClosure
+        positionsForClosure.push(...openPositionsConflicts.slice(1));
 
-            // Filter out positions with reason 'closedPositionsConflict' and push them into positionsForClosure
-            const closedPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'closedPositionsConflict');
-            positionsForClosure.push(...closedPositionsConflicts);
-        }
+        // Filter out positions with reason 'closedPositionsConflict' and push them into positionsForClosure
+        const closedPositionsConflicts = positionsWithin24Hours[instrument].filter(p => p.reason === 'closedPositionsConflict');
+        positionsForClosure.push(...closedPositionsConflicts);
     }
     
     // Create the array that contains the details needed for closure

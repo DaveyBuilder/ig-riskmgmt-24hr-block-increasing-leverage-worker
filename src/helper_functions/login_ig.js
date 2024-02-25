@@ -24,7 +24,7 @@ export async function loginIG(env, baseURL) {
             console.log(`Login attempt ${attempts} failed with status: ${loginResponse.status}, Response: ${JSON.stringify(responseBody, null, 2)}`);
             attempts++;
             if (attempts > 3) {
-                throw new Error(`Login failed after ${attempts - 1} attempts with status: ${loginResponse.status}, Response: ${JSON.stringify(responseBody, null, 2)}`);
+                throw new Error(`Login failed after ${attempts} attempts with status: ${loginResponse.status}, Response: ${JSON.stringify(responseBody, null, 2)}`);
             }
         }
     }

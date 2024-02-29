@@ -1,4 +1,4 @@
-export async function getClosedTrades(env, days) {
+export async function getClosedTrades(env, hours) {
 
     let attempts = 1;
     let dbResults;
@@ -6,9 +6,9 @@ export async function getClosedTrades(env, days) {
     while (attempts <= 3) {
 
         try {
-            // Get closed trades from the past X days from the database
+            // Get closed trades from the past X hours from the database
             const sqlStatement = await env.DB.prepare(`
-                SELECT * FROM CLOSEDPOSITIONS WHERE datetime(closedDateUtc) >= datetime('now', '-${days} days', 'utc')
+                SELECT * FROM CLOSEDPOSITIONS WHERE datetime(closedDateUtc) >= datetime('now', '-${hours} hours', 'utc')
             `);
             dbResults = await sqlStatement.all();
 

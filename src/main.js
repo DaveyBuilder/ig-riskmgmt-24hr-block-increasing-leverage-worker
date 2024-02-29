@@ -34,7 +34,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
         }
     });
 
-    const closedPositions = await getClosedTrades(env, 1);
+    const closedPositions = await getClosedTrades(env, 12);
 
     let positionsWithin24Hours = {};
 
@@ -51,7 +51,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
                 const diff = Math.abs(dates[i] - dates[j]);
 
                 // If difference <= 24 hours
-                if (diff <= 24 * 60 * 60 * 1000) {
+                if (diff <= 12 * 60 * 60 * 1000) {
                     // Create objects for the conflicting positions
                     const positionDataI = { position: positions[i], reason: 'openPositionsConflict' };
                     const positionDataJ = { position: positions[j], reason: 'openPositionsConflict' };
@@ -90,7 +90,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
                     const diff = Math.abs(openPositionsCreatedDates[i] - closedPositionsOpenDates[j]);
 
                     // If difference <= 24 hours and the open position was created after the closed position
-                    if (diff <= 24 * 60 * 60 * 1000 && openPositionsCreatedDates[i] > closedPositionsOpenDates[j]) {
+                    if (diff <= 12 * 60 * 60 * 1000 && openPositionsCreatedDates[i] > closedPositionsOpenDates[j]) {
                         // Create an object for the conflicting (open) position
                         const positionData = { position: openPositions[closedInstrument].positions[i], reason: 'closedPositionsConflict' };
 
@@ -128,7 +128,7 @@ export async function executeScheduledTask(request, env, ctx, usingDemoAccount) 
     // Create the array that contains the details needed for closure
     const positionsToClose = [];
     for (const item of positionsForClosure) {
-        if (item.position.market.marketStatus === "TRADEABLE") {
+        if (item.position.market.marketStatus === "TRADEABLE" && item.position.market.instrumentName !== "Japan 225") {
             const positionDetailsForClosure = {
                 dealId: item.position.position.dealId,
                 epic: null,
